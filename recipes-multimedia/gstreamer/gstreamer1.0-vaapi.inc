@@ -11,7 +11,8 @@ LIC_FILES_CHKSUM = "file://COPYING.LIB;md5=4fbd65380cdd255951079008b364516c"
 
 DEPENDS = "libva"
 
-SRC_URI = "https://gstreamer.freedesktop.org/src/${REALPN}/${REALPN}-${PV}.tar.xz \
+SRC_URI = "git://anongit.freedesktop.org/gstreamer/gstreamer-vaapi;branch=master;name=base \
+           git://anongit.freedesktop.org/gstreamer/common;destsuffix=git/common;name=common \
           "
 
 S = "${WORKDIR}/${REALPN}-${PV}"
