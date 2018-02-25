@@ -1,0 +1,39 @@
+diff --git a/gst/rtp/rtpulpfeccommon.c b/gst/rtp/rtpulpfeccommon.c
+index 9bca5df66..987e1fc15 100644
+--- a/gst/rtp/rtpulpfeccommon.c
++++ b/gst/rtp/rtpulpfeccommon.c
+@@ -430,7 +430,7 @@ rtp_ulpfec_log_fec_packet (GstDebugCategory * cat, GstDebugLevel level,
+ 
+   fec_level_hdr = fec_hdr_get_level_hdr (fec_hdr);
+   GST_CAT_LEVEL_LOG (cat, level, object,
+-      "%-22s: protection_len=%u mask=0x%012lx",
++      "%-22s: protection_len=%u mask=0x%012llx",
+       "fec level header",
+       g_ntohs (fec_level_hdr->protection_len),
+       fec_level_hdr_get_mask (fec_level_hdr, fec_hdr->L));
+diff --git a/sys/v4l2/gstv4l2object.c b/sys/v4l2/gstv4l2object.c
+index a5e67076f..253dab10e 100644
+--- a/sys/v4l2/gstv4l2object.c
++++ b/sys/v4l2/gstv4l2object.c
+@@ -460,6 +460,12 @@ gst_v4l2_object_install_m2m_properties_helper (GObjectClass * gobject_class)
+           GST_TYPE_STRUCTURE, G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+ }
+ 
++static void *
++direct_mmap(gpointer addr, gsize length, gint prot, gint flags, gint fd, gint64 offset)
++{
++  return mmap(addr, length, prot, flags, fd, offset);
++}
++
+ GstV4l2Object *
+ gst_v4l2_object_new (GstElement * element,
+     GstObject * debug_object,
+@@ -517,7 +523,7 @@ gst_v4l2_object_new (GstElement * element,
+     v4l2object->dup = dup;
+     v4l2object->ioctl = ioctl;
+     v4l2object->read = read;
+-    v4l2object->mmap = mmap;
++    v4l2object->mmap = direct_mmap;
+     v4l2object->munmap = munmap;
+   }
+ 
