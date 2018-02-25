@@ -7,12 +7,17 @@ DEPENDS = "gstreamer1.0 libcgroup gstreamer1.0-plugins-base libcheck"
 
 PNREAL = "gst-rtsp-server"
 
-SRC_URI = "http://gstreamer.freedesktop.org/src/${PNREAL}/${PNREAL}-${PV}.tar.xz \
+SRC_URI = "git://anongit.freedesktop.org/gstreamer/gst-rtsp-server;branch=master;name=base \
+           git://anongit.freedesktop.org/gstreamer/common;destsuffix=git/common;name=common \
            file://0001-Don-t-hardcode-libtool-name-when-using-introspection.patch \
            file://0001-introspection.m4-prefix-pkgconfig-paths-with-PKG_CON.patch \
            file://gtk-doc-tweaks.patch"
 
-S = "${WORKDIR}/${PNREAL}-${PV}"
+S = "${WORKDIR}/git"
+
+do_configure_prepend() {
+	${S}/autogen.sh --noconfigure
+}
 
 inherit autotools pkgconfig upstream-version-is-even gobject-introspection gtk-doc
 

@@ -1,0 +1,26 @@
+From d3e12e83c2aba04ed1cbdc5f8e8fb724f683c54c Mon Sep 17 00:00:00 2001
+From: Carlos Rafael Giani <dv@pseudoterminal.org>
+Date: Sun, 25 Feb 2018 16:31:20 +0100
+Subject: [PATCH] rtsp-media: Fix g_print() format string
+
+---
+ gst/rtsp-server/rtsp-media.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/gst/rtsp-server/rtsp-media.c b/gst/rtsp-server/rtsp-media.c
+index 8f21fa9..385f6b4 100644
+--- a/gst/rtsp-server/rtsp-media.c
++++ b/gst/rtsp-server/rtsp-media.c
+@@ -1921,7 +1921,8 @@ appsink_pad_probe (GstPad * pad, GstPadProbeInfo * info, gpointer user_data)
+     if (gst_base_sink_query_latency (GST_BASE_SINK (data->appsink), NULL, NULL,
+             &min, &max)) {
+       g_object_set (data->appsrc, "min-latency", min, "max-latency", max, NULL);
+-      g_print ("setting latency to %lu %lu\n", min, max);
++      g_print ("setting latency to %" G_GUINT64_FORMAT " %" G_GUINT64_FORMAT
++          "\n", min, max);
+     }
+   } else if (GST_IS_QUERY (info->data)) {
+     GstPad *srcpad = gst_element_get_static_pad (data->appsrc, "src");
+-- 
+2.14.1
+
